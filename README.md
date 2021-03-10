@@ -1,5 +1,3 @@
-
-
 # fsklearn
 
 A simple module for machine learning in Fortran using [scikit-learn](https://github.com/scikit-learn/scikit-learn).
@@ -13,13 +11,14 @@ A simple module for machine learning in Fortran using [scikit-learn](https://git
 
 -   The prediction part, as it may be called frequent by a FORTRAN code, is written with FORTRAN 2003.
 
-## Supported machine learning method
-Currently, the following methods are supported for
-**regression** (not classification) problem:
 
--   Neual Networks
+## Supported machine learning method
+Currently, the following methods are supported for **regression** (not classification) problem:
+
+-   Neural Networks
 -   Decision Tree
 -   Random Forest
+
 
 ## Supported FORTRAN compiler
 
@@ -29,6 +28,7 @@ The following compiler are tested.
 -   GNU - Tested with 8.1.0
 
 Since derived type is used in the module, it is recommended to used GNU > 5.0 or Intel > 14.0 (2013 SP1).
+
 
 ## Required packages for **Python3**
 
@@ -46,7 +46,7 @@ Since derived type is used in the module, it is recommended to used GNU > 5.0 or
 ## Run the test
 
 ```bash
-    git clone https://github.com/Yeldon/fsklearn.git
+    git clone https://github.com/lkampoli/fsklearn.git
     cd fsklearn/
     cp -r tests/src ./
     cp -r tests/build ./
@@ -54,11 +54,11 @@ Since derived type is used in the module, it is recommended to used GNU > 5.0 or
     ./build/fsklearn_test
 ```
 
+
 ## Example
 
 Assume you have set up the file path and the correct input and output
 interface for your data, a simple main program (sequential version) could be:
-
 
 -   training
 
@@ -79,7 +79,6 @@ interface for your data, a simple main program (sequential version) could be:
     end program main
 ```
 
-
 -   prediction
 
 ```fortran
@@ -93,6 +92,7 @@ interface for your data, a simple main program (sequential version) could be:
     ! If you have setup the mod_fsklearn and input.namelist, this should be working
     F_Sklearn%outputs = F_Sklearn%predict(inputs,F_Sklearn%n_inputs,F_Sklearn%n_outputs)
 ``` 
+
 
 ## Progress<code>[6/8]</code>
 
@@ -109,4 +109,3 @@ interface for your data, a simple main program (sequential version) could be:
 ## License
 
 This project is licensed under the BSD3 - see the [LICENSE.md](LICENSE.md) file for details
-

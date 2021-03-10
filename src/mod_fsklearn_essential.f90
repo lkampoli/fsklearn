@@ -81,7 +81,8 @@ Module Mod_Fsklearn_Essential
     Type(String) , Allocatable :: key(:)
     Type(String) , Allocatable :: value(:)
     Character(100) :: Coef_files_path      = './'
-    Character(100) :: Coef_File_Name       = '' Character(100) :: set_ML_file          = 'fsklearn_coef.namelist'
+    Character(100) :: Coef_File_Name       = '' 
+    Character(100) :: set_ML_file          = 'fsklearn_coef.namelist'
     Character(100) :: training_py          = 'training.py'
     Character(100) :: training_data_path   = './'
     Character(100) :: training_input_name  = 'training_input'
@@ -1603,7 +1604,7 @@ Contains
         ' = ' // Trim(self%value(i)%str) // ')'
 
 
-!>  end Subroutine Generate_Parameter_Script
+  End Subroutine Generate_Parameter_Script
 
 
 End Module Mod_Fsklearn_Essential
