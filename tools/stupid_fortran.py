@@ -1,6 +1,6 @@
 import numpy as np
 
-f = open('buffe1r.namelist')
+f  = open('buffe1r.namelist')
 f2 = open('stupid_fortran.f90', 'w')
 
 

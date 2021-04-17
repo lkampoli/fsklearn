@@ -66,7 +66,6 @@ Program main_MPI
 
   Call MPI_Barrier(MPI_COMM_WORLD, ier)
 
-
 End Program main_MPI
 
 # else
@@ -79,7 +78,9 @@ Program main
   real(4) :: sample_data(1000,6)
   integer :: i
 
+  write(*,*) "Before F_Sklearn%Initialization"
   Call F_Sklearn%Initialization
+  write(*,*) "After F_Sklearn%Initialization"
 
   Write(*,*) '============================='
 # if defined(FSKLEARN_TRAINING)
@@ -115,7 +116,6 @@ Program main
   write(*,*) 'Complete prediction'
   write(*,*) "results are:", F_Sklearn%outputs
 # endif
-
 
 End Program main
 # endif

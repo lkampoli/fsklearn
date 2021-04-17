@@ -9,8 +9,8 @@
 # FLAG_3 = -DFSKLEARN_TRAINING
   FLAG_4 = -DFSKLEARN_PREDICTION
 # FLAG_5 = -DNeuralNetwork
-# FLAG_5 = -DDecisionTree
-  FLAG_5 = -DRandomForest
+  FLAG_5 = -DDecisionTree
+# FLAG_5 = -DRandomForest
 
 #--------------------fortran compiler and flags----------------------------
   CPP      = /usr/bin/cpp 

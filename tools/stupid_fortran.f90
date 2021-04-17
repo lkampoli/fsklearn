@@ -1,35 +1,35 @@
-Character(50) :: n_estimators= 'NULL'
-Character(50) :: criterion= 'NULL'
-Character(50) :: max_depth= 'NULL'
-Character(50) :: min_samples_split= 'NULL'
-Character(50) :: min_samples_leaf= 'NULL'
-Character(50) :: min_weight_fraction_leaf= 'NULL'
-Character(50) :: max_features= 'NULL'
-Character(50) :: max_leaf_nodes= 'NULL'
-Character(50) :: min_impurity_decrease= 'NULL'
-Character(50) :: min_impurity_split= 'NULL'
-Character(50) :: bootstrap= 'NULL'
-Character(50) :: oob_score= 'NULL'
-Character(50) :: n_jobs= 'NULL'
-Character(50) :: random_state= 'NULL'
-Character(50) :: verbose= 'NULL'
-Character(50) :: warm_start= 'NULL'
+Character(50) :: n_estimators             = 'NULL'
+Character(50) :: criterion                = 'NULL'
+Character(50) :: max_depth                = 'NULL'
+Character(50) :: min_samples_split        = 'NULL'
+Character(50) :: min_samples_leaf         = 'NULL'
+Character(50) :: min_weight_fraction_leaf = 'NULL'
+Character(50) :: max_features             = 'NULL'
+Character(50) :: max_leaf_nodes           = 'NULL'
+Character(50) :: min_impurity_decrease    = 'NULL'
+Character(50) :: min_impurity_split       = 'NULL'
+Character(50) :: bootstrap                = 'NULL'
+Character(50) :: oob_score                = 'NULL'
+Character(50) :: n_jobs                   = 'NULL'
+Character(50) :: random_state             = 'NULL'
+Character(50) :: verbose                  = 'NULL'
+Character(50) :: warm_start               = 'NULL'
 
 Namelist /RF_Parameter/ n_estimators, &
-criterion, &
-max_depth, &
-min_samples_split, &
-min_samples_leaf, &
-min_weight_fraction_leaf, &
-max_features, &
-max_leaf_nodes, &
-min_impurity_decrease, &
-min_impurity_split, &
-bootstrap, &
-oob_score, &
-n_jobs, &
-random_state, &
-verbose, &
+criterion,                            &
+max_depth,                            &
+min_samples_split,                    &
+min_samples_leaf,                     &
+min_weight_fraction_leaf,             &
+max_features,                         &
+max_leaf_nodes,                       &
+min_impurity_decrease,                &
+min_impurity_split,                   &
+bootstrap,                            &
+oob_score,                            &
+n_jobs,                               &
+random_state,                         &
+verbose,                              &
 warm_start
 
 If (n_estimators .ne. 'NULL') Then
@@ -143,4 +143,3 @@ self%value(15) = "0 "
 
 self%key(16) = "warm_start"
 self%value(16) = "False"
-

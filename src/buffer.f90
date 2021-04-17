@@ -24,7 +24,6 @@
   ! TR_3 & PR_3: Assign the procedure pointer to the type defined
   ! in the namelist file
 
-
 module test
 
   Integer, Parameter :: PS = 4
@@ -33,30 +32,30 @@ module test
     Character(100) :: str
   End type String
 
-  Type, Public :: Fsklearn_IO
-    Character(20) :: training_type
-    Character(1000) :: Training_script
-    Integer :: n_inputs
-    Integer :: n_outputs
-    Logical :: train_after_run
-    Real(PS), Allocatable :: Inputs(:)
-    Real(PS), Allocatable :: Outputs(:)
-    Integer :: num_para
-    Type(String) , Allocatable :: key(:)
-    Type(String) , Allocatable :: value(:)
-    Character(100) :: Coef_files_path      = ''
-    Character(100) :: Coef_file_Name       = ''
-    Character(100) :: set_ML_file          = 'fsklearn_coef.namelist'
-    Character(100) :: training_py          = 'training.py'
-    Character(100) :: training_data_path   = ''
-    Character(100) :: training_input_name  = 'training_input'
-    Character(100) :: training_output_name = 'training_output'
+  Type, Public                :: Fsklearn_IO
+    Character(20)             :: training_type
+    Character(1000)           :: Training_script
+    Integer                   :: n_inputs
+    Integer                   :: n_outputs
+    Logical                   :: train_after_run
+    Real(PS), Allocatable     :: Inputs(:)
+    Real(PS), Allocatable     :: Outputs(:)
+    Integer                   :: num_para
+    Type(String), Allocatable :: key(:)
+    Type(String), Allocatable :: value(:)
+    Character(100)            :: Coef_files_path      = ''
+    Character(100)            :: Coef_file_Name       = ''
+    Character(100)            :: set_ML_file          = 'fsklearn_coef.namelist'
+    Character(100)            :: training_py          = 'training.py'
+    Character(100)            :: training_data_path   = ''
+    Character(100)            :: training_input_name  = 'training_input'
+    Character(100)            :: training_output_name = 'training_output'
   Contains
     Procedure :: Common_Initialization
-    Procedure :: Read_Coef => Common_Read_Coef
-    Procedure :: Gen_PY => Generate_Training_Python
+    Procedure :: Read_Coef           => Common_Read_Coef
+    Procedure :: Gen_PY              => Generate_Training_Python
     Procedure :: Read_Training_Param => Common_Read_and_Update_Para
-    Procedure :: Gen_Para_Script => Generate_Parameter_Script
+    Procedure :: Gen_Para_Script     => Generate_Parameter_Script
     Procedure :: Py_Import
     Procedure :: PY_main
     Procedure :: PY_sk2f
@@ -109,19 +108,19 @@ module test
   End Type Nodes
 
   type Trees
-    Integer :: node_count
-    Integer :: max_depth
+    Integer                  :: node_count
+    Integer                  :: max_depth
     Type(Nodes), Allocatable :: Node(:)
   End type Trees
 
   Type, Extends(Fsklearn_IO) :: Decision_Tree
-    Type(Trees) :: Tree
+    Type(Trees)              :: Tree
   Contains
-    Procedure :: Read_Coef => DT_Read_Coef
-    Procedure :: Predict_One => DT_Predict_One
-    Procedure :: Predict_Vec => DT_Predict_Vec
-    Procedure :: Predict_Mat => DT_Predict_Mat
-    Procedure :: Read_Training_Param => DT_Read_and_Update_Para
+    Procedure                :: Read_Coef           => DT_Read_Coef
+    Procedure                :: Predict_One         => DT_Predict_One
+    Procedure                :: Predict_Vec         => DT_Predict_Vec
+    Procedure                :: Predict_Mat         => DT_Predict_Mat
+    Procedure                :: Read_Training_Param => DT_Read_and_Update_Para
   End Type Decision_Tree
 
   Type, Extends(Fsklearn_IO) :: Random_Forest
@@ -393,7 +392,6 @@ program main
 
   learn%n_inputs = 2
   learn%n_outputs = 3
-
 
   Call learn%Common_Initialization
   ! print *,''

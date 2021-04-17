@@ -89,16 +89,16 @@ Module Mod_Fsklearn_Essential
     Character(100) :: training_output_name = 'training_output'
   Contains
     Procedure :: Common_Initialization
-    Procedure , pass(self) :: Read_Coef => Common_Read_Coef
-    Procedure :: Gen_PY => Generate_Training_Python
-    Procedure :: Read_Training_Param => Common_Read_and_Update_Param
+    Procedure, pass(self) :: Read_Coef => Common_Read_Coef
+    Procedure :: Gen_PY                => Generate_Training_Python
+    Procedure :: Read_Training_Param   => Common_Read_and_Update_Param
     Procedure :: Generate_Parameter_Script
     Procedure :: Py_Import
     Procedure :: PY_main
     Procedure :: PY_sk2f
   End Type Fsklearn_IO
 
-  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓Neural Networks variables↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Neural Networks variables ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
   Type Ragged_Vector
     Real(PS), Allocatable :: Vec(:)
@@ -115,32 +115,32 @@ Module Mod_Fsklearn_Essential
   ! interface for choose activation type
   Interface
     Function Sub_Interface(n, X)
-      Import :: PS
-      Integer,  Intent(in) :: n
+      Import                             :: PS
+      Integer,  Intent(in)               :: n
       Real(PS), Intent(in), Dimension(n) :: X
-      Real(PS), Dimension(n) :: Sub_Interface
+      Real(PS), Dimension(n)             :: Sub_Interface
     End Function Sub_Interface
   End Interface
 
   ! neural network coefficients
   Type, Extends(Fsklearn_IO) :: Neural_Network
-    Integer :: layers
-    Integer, Allocatable :: Layer_Size(:)
+    Integer                          :: layers
+    Integer,             Allocatable :: Layer_Size(:)
     Type(Ragged_Vector), Allocatable :: Activations(:)
     Type(Ragged_Vector), Allocatable :: Intercepts(:)
     Type(Ragged_Matrix), Allocatable :: Coefs(:)
-    Character(10) :: Activation_type
-    Character(10) :: out_Activation_type
-    Type(NN_Activation) :: Activation
-    Type(NN_Activation) :: Out_Activation
+    Character(10)                    :: Activation_type
+    Character(10)                    :: out_Activation_type
+    Type(NN_Activation)              :: Activation
+    Type(NN_Activation)              :: Out_Activation
     Contains
-      Procedure :: Read_Coef => NN_Read_Coef
-      Procedure :: Predict_One => NN_Predict_One
-      ! Procedure :: Predict_Vec => NN_Predict_Vec
-      ! Procedure :: Predict_Mat => NN_Predict_Mat
-      Procedure :: Read_Training_Param => NN_Read_and_Update_Param
+      Procedure   :: Read_Coef           => NN_Read_Coef
+      Procedure   :: Predict_One         => NN_Predict_One
+      ! Procedure :: Predict_Vec         => NN_Predict_Vec
+      ! Procedure :: Predict_Mat         => NN_Predict_Mat
+      Procedure   :: Read_Training_Param => NN_Read_and_Update_Param
   End Type Neural_Network
-  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑End Neural Network Variables↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑ End Neural Network Variables ↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
   !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓Decision Tree Variables↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -200,14 +200,14 @@ Contains
     Implicit None
 
     Class(Fsklearn_IO) :: self
-    Character(20)  :: training_type
-    Integer        :: n_inputs
-    Integer        :: n_outputs
-    Character(100) :: tmp_name
-    Character(100) :: str_id
-    Logical        :: train_after_run
+    Character(20)      :: training_type
+    Integer            :: n_inputs
+    Integer            :: n_outputs
+    Character(100)     :: tmp_name
+    Character(100)     :: str_id
+    Logical            :: train_after_run
 # if defined(PARALLEL)
-    Integer :: myid, ier, ierr, n_proc
+    Integer            :: myid, ier, ierr, n_proc
 # endif
 
     Namelist /sizes/ n_inputs, n_outputs
@@ -217,17 +217,17 @@ Contains
     type is (Fsklearn_IO)
       ! no further initialization required
     class is (Neural_Network)
-      self%Training_Type = 'Neural_Network'
-      self%num_para = 21
-      self%Coef_File_Name = 'nn_coef.dat'
+      self%Training_Type     = 'Neural_Network'
+      self%num_para          = 21
+      self%Coef_File_Name    = 'nn_coef.dat'
     class is (Decision_Tree)
-      self%Training_Type = 'Decision_Tree'
-      self%num_para = 12
-      self%Coef_File_Name = 'dt_coef.dat'
+      self%Training_Type     = 'Decision_Tree'
+      self%num_para          = 12
+      self%Coef_File_Name    = 'dt_coef.dat'
     class is (Random_Forest)
-      self%Training_Type = 'Random_Forest'
-      self%num_para = 16
-      self%Coef_File_Name = 'rf_coef.dat'
+      self%Training_Type     = 'Random_Forest'
+      self%num_para          = 16
+      self%Coef_File_Name    = 'rf_coef.dat'
     end select
 
     Allocate(self%key(self%num_para))
@@ -243,8 +243,7 @@ Contains
     Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ier)
     Call MPI_COMM_SIZE(MPI_COMM_WORLD, n_proc, ier)
     If (myid .eq. 0) Then
-      tmp_name = Trim(Adjustl(self%coef_files_path))// &
-          Trim(Adjustl(self%set_ML_file))
+      tmp_name = Trim(Adjustl(self%coef_files_path))//Trim(Adjustl(self%set_ML_file))
       Open(79, file = tmp_name) ! TR_1 &PR_1
       Read(79, nml = sizes)
       Read(79, nml = training_setting)
@@ -277,42 +276,43 @@ Contains
 # else
 ! sequential version
     ! Read from namelist file
-    tmp_name = Trim(Adjustl(self%coef_files_path))// &
-        Trim(Adjustl(self%set_ML_file))
+    tmp_name = Trim(Adjustl(self%coef_files_path))//Trim(Adjustl(self%set_ML_file))
+    write(*,*) tmp_name
     Open(79, file = tmp_name)
-
+    write(*,*) "Opened file:", tmp_name
     Read(79, nml = sizes)
     Read(79, nml = training_setting)
     Close(79)
+    write(*,*) "Closed file:", tmp_name
     Open(79, file = tmp_name)
 
-    self%n_inputs       = n_inputs
+    self%n_inputs        = n_inputs
     self%n_outputs       = n_outputs
     self%train_after_run = train_after_run
+    write(*,*) self%n_inputs
+    write(*,*) self%n_outputs
+    write(*,*) self%train_after_run
 
-    tmp_name = Trim(Adjustl(self%training_data_path))// &
-        Trim(Adjustl(self%training_input_name))// &
-        '.dat'
+    tmp_name = Trim(Adjustl(self%training_data_path))//Trim(Adjustl(self%training_input_name))//'.dat'
+    write(*,*) tmp_name
     Open(2000, file=tmp_name,status='unknown')
-    tmp_name = Trim(Adjustl(self%training_data_path))// &
-        Trim(Adjustl(self%training_output_name))// &
-        '.dat'
+    write(*,*) "Opened: ", tmp_name
+    tmp_name = Trim(Adjustl(self%training_data_path))//Trim(Adjustl(self%training_output_name))//'.dat'
+    write(*,*) tmp_name
     Open(3000, file=tmp_name,status='unknown')
-
+    write(*,*) "Opened: ", tmp_name
 # endif
 
 # if defined (FSKLEARN_TRAINING)
 # if defined (PARALLEL)
     If (myid .eq. 0) Then
-      tmp_name = Trim(adjustl(self%coef_files_path))// &
-          Trim(adjustl(self%training_py))
+      tmp_name = Trim(adjustl(self%coef_files_path))//Trim(adjustl(self%training_py))
       Open(77, file = tmp_name)
       Call self%Generate_Parameter_Script(79)
       Call self%Gen_PY(77)
     End if
 # else
-    tmp_name = Trim(adjustl(self%coef_files_path))// &
-        Trim(adjustl(self%training_py))
+    tmp_name = Trim(adjustl(self%coef_files_path))//Trim(adjustl(self%training_py))
     Open(77, file = tmp_name)
     Call self%Generate_Parameter_Script(79)
     Call self%Gen_PY(77)
@@ -338,22 +338,22 @@ Contains
     Implicit None
 
     Class(Neural_Network) :: self
-    Integer :: i,j
-    Integer :: error
-    Character(100) :: string
+    Integer               :: i,j
+    Integer               :: error
+    Character(100)        :: string
 
-    Character :: activation
-    Character :: out_activation
-    character(100) :: tmp, tmp1
+    Character             :: activation
+    Character             :: out_activation
+    character(100)        :: tmp, tmp1
 # if defined (PARALLEL)
-    Integer :: n_proc
-    Integer :: myid
-    Character(10) :: string_myid
-    Integer :: ier
+    Integer               :: n_proc
+    Integer               :: myid
+    Character(10)         :: string_myid
+    Integer               :: ier
 # endif
 
     tmp = Trim(adjustl(self%coef_files_path))// &
-        Trim(adjustl(self%Coef_File_Name))
+          Trim(adjustl(self%Coef_File_Name))
 
 # if defined (PARALLEL)
 ! Parallel version
@@ -362,7 +362,7 @@ Contains
     Call MPI_COMM_SIZE(MPI_COMM_WORLD, n_proc, ier)
     Write(string_myid,"(I10)") myid
     tmp1 = Trim(Adjustl(tmp))// &
-        Trim(Adjustl(string_myid))
+           Trim(Adjustl(string_myid))
     Do i = 0, n_proc-1
       If (myid .eq. i) Then
         Call Execute_Command_Line('cp '//tmp//' '//tmp1)
@@ -449,9 +449,8 @@ Contains
 
     Read(81,*,iostat=error) string
     Read(81,*) self%layer_size
-    self%n_inputs = self%layer_size(1)
+    self%n_inputs  = self%layer_size(1)
     self%n_outputs = self%layer_size(self%layers)
-
 
     Allocate(self%activations(self%layers))
     Do i = 1,self%layers
@@ -464,7 +463,6 @@ Contains
       Allocate(self%intercepts(i)%vec(self%layer_size(i+1)))
       Read(81,*) self%intercepts(i)%vec
     End do
-
 
     Read(81,*,iostat=error) string
     Allocate(self%coefs(self%layers-1))
@@ -510,7 +508,6 @@ Contains
     Else
       Write(*,*) 'invalid output activation type'
     End If
-
 # endif
 
   End Subroutine NN_Read_Coef
@@ -521,19 +518,22 @@ Contains
 # endif
     Implicit None
     Class(Decision_Tree) :: self
-    Integer :: i,j
-    Integer :: error
-    Character(20) :: string
-    Character(100) :: tmp, tmp1
+    Integer              :: i,j
+    Integer              :: error
+    Character(20)        :: string
+    Character(100)       :: tmp, tmp1
 # if defined (PARALLEL)
-    Integer :: n_proc
-    Integer :: myid
-    Character(10) :: string_myid
-    Integer :: ier
+    Integer              :: n_proc
+    Integer              :: myid
+    Character(10)        :: string_myid
+    Integer              :: ier
 # endif
 
+    write(*,*) "in DT_Read_Coef"
+
     tmp = Trim(Adjustl(self%coef_files_path))// &
-        Trim(Adjustl(self%Coef_file_Name))
+          Trim(Adjustl(self%Coef_file_Name))
+    write(*,*) tmp
 
 # if defined (PARALLEL)
 ! Parallel version
@@ -541,8 +541,7 @@ Contains
     Call MPI_COMM_RANK(MPI_COMM_WORLD, myid, ier)
     Call MPI_COMM_SIZE(MPI_COMM_WORLD, n_proc, ier)
     Write(string_myid,"(I10)") myid
-    tmp1 = Trim(Adjustl(tmp))// &
-        Trim(Adjustl(string_myid))
+    tmp1 = Trim(Adjustl(tmp))//Trim(Adjustl(string_myid))
     Do i = 0, n_proc-1
       If (myid .eq. i) Then
         Call Execute_Command_Line('cp '//tmp//' '//tmp1)
@@ -585,7 +584,7 @@ Contains
 # else
 ! sequential version
     Open(82, file=tmp, status='unknown')
-
+    write(*,*) "Opened: ", tmp
     Read(82,*,iostat=error) string
     Read(82,*) self%Tree%node_count
     Read(82,*,iostat=error) string
@@ -618,19 +617,19 @@ Contains
 # endif
     Implicit None
     Class(Random_Forest) :: self
-    Integer :: i,j
-    Integer :: error
-    Character(100) :: string
-    character(100) :: tmp, tmp1
+    Integer              :: i,j
+    Integer              :: error
+    Character(100)       :: string
+    character(100)       :: tmp, tmp1
 # if defined(PARALLEL)
-    Integer :: n_proc
-    Integer :: myid
-    Character(10) :: string_myid
-    Integer :: ier
+    Integer              :: n_proc
+    Integer              :: myid
+    Character(10)        :: string_myid
+    Integer              :: ier
 # endif
 
     tmp = Trim(Adjustl(self%coef_files_path))// &
-        Trim(Adjustl(self%Coef_file_Name)) 
+          Trim(Adjustl(self%Coef_file_Name)) 
 
 # if defined (PARALLEL)
 ! Parallel version
@@ -723,13 +722,13 @@ Contains
 
   End Subroutine RF_Read_Coef
 
-  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Predict Subroutines↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Predict Subroutines ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
   function NN_Predict_One(self, input)
     Implicit None
     Class(Neural_Network) :: self
-    Real(PS) :: input(self%n_inputs)
-    Real(PS) :: NN_Predict_One(self%n_outputs)
-    integer :: i
+    Real(PS)              :: input(self%n_inputs)
+    Real(PS)              :: NN_Predict_One(self%n_outputs)
+    integer               :: i
 
     self%activations(1)%vec = input
 
@@ -754,10 +753,9 @@ Contains
   function DT_Predict_One(self,input)
     Implicit None
     Class(Decision_Tree) :: self
-    Real(PS) :: input(self%n_inputs)
-    Real(PS) :: DT_Predict_One(self%n_outputs)
-
-    integer :: i,n
+    Real(PS)             :: input(self%n_inputs)
+    Real(PS)             :: DT_Predict_One(self%n_outputs)
+    integer              :: i,n
 
     n = 1
     Do i = 1, Self%Tree%max_depth
@@ -776,10 +774,9 @@ Contains
   function RF_Predict_One(self, input)
     Implicit None
     Class(Random_Forest) :: self
-    Real(PS) :: input(self%n_inputs)
-    Real(PS) :: RF_Predict_One(self%n_outputs)
-
-    integer :: i, j, n
+    Real(PS)             :: input(self%n_inputs)
+    Real(PS)             :: RF_Predict_One(self%n_outputs)
+    integer              :: i, j, n
 
     RF_Predict_One = 0.0_PS
     Do j = 1, Self%tree_count
@@ -798,7 +795,7 @@ Contains
     RF_Predict_One = RF_Predict_One / Self%tree_count
 
   End function RF_Predict_One
-  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑End Prediction Subroutines↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑ End Prediction Subroutines ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
   !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Activation functions↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓

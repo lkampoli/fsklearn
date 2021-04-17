@@ -5,42 +5,40 @@ A simple module for machine learning in Fortran using [scikit-learn](https://git
 
 ## Overview
 
--   Currently the module can be used to do training and prediction in FORTRAN.
-
--   The training part uses [scikit-learn](https://github.com/scikit-learn/scikit-learn) library by calling Python from FORTRAN.
-
--   The prediction part, as it may be called frequent by a FORTRAN code, is written with FORTRAN 2003.
+- Currently the module can be used to do training and prediction in FORTRAN.
+- The training part uses [scikit-learn](https://github.com/scikit-learn/scikit-learn) library by calling Python from FORTRAN.
+- The prediction part, as it may be called frequent by a FORTRAN code, is written with FORTRAN 2003.
 
 
 ## Supported machine learning method
 Currently, the following methods are supported for **regression** (not classification) problem:
 
--   Neural Networks
--   Decision Tree
--   Random Forest
+- Neural Networks
+- Decision Tree
+- Random Forest
 
 
 ## Supported FORTRAN compiler
 
 The following compiler are tested. 
 
--   Intel - Tested with 2019.0.2.187
--   GNU - Tested with 8.1.0
+- Intel - Tested with 2019.0.2.187
+- GNU - Tested with 8.1.0
 
 Since derived type is used in the module, it is recommended to used GNU > 5.0 or Intel > 14.0 (2013 SP1).
 
 
 ## Required packages for **Python3**
 
--   numpy
--   json
--   [scikit-learn](https://github.com/scikit-learn/scikit-learn)
+- numpy
+- json
+- [scikit-learn](https://github.com/scikit-learn/scikit-learn)
 
 
 ## build tool
 
--   Makefile
--   [FoBis.py](https://github.com/szaghi/FoBiS) (testing)
+- Makefile
+- [FoBis.py](https://github.com/szaghi/FoBiS) (testing)
 
 
 ## Run the test
@@ -60,7 +58,7 @@ Since derived type is used in the module, it is recommended to used GNU > 5.0 or
 Assume you have set up the file path and the correct input and output
 interface for your data, a simple main program (sequential version) could be:
 
--   training
+- training
 
 ```fortran
     program main
@@ -79,7 +77,7 @@ interface for your data, a simple main program (sequential version) could be:
     end program main
 ```
 
--   prediction
+- prediction
 
 ```fortran
     program main

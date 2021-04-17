@@ -1,11 +1,10 @@
-!--------------------------------------------------------
-! Module for user to buld their own API to the specific
-! computational models
-!--------------------------------------------------------
+!------------------------------------------------------------------------------
+! Module for the user to build his own API to the specific computational model
+!------------------------------------------------------------------------------
 !
-! by Zhouteng Ye
-! Last update: 05/12/2019
-!---------------------------------------------------------
+! by Zhouteng Ye, Lorenzo Campoli
+! Last update: 05/12/2019, 17/05/2021
+!------------------------------------------------------------------------------
 
 # if defined (PARALLEL)
 Module Mod_Fsklearn
@@ -34,7 +33,7 @@ Module Mod_Fsklearn
     ! define some procedures for the computational model
     Procedure :: Initialization => Example_Initialization
     Procedure :: Gen_Training   => Example_Generate_Training_Data
-    Procedure :: Prediction   => Example_Prediction
+    Procedure :: Prediction     => Example_Prediction
     Procedure :: Py_Training    => Example_Training
   End type Fsklearn_Example
 
@@ -100,7 +99,7 @@ Contains
   End Function Example_Prediction
 
 
-  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓Call python to train↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Call python to train ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
   !---------------------------------------------------------------
   ! If train_after_run is set as .True. in the .namelist file,
   ! run the python file after training.
@@ -119,12 +118,12 @@ Contains
     End If
 
   End Subroutine Example_Training
-  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑end training↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-
+  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑ end training ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 End Module Mod_Fsklearn
-#else
+
+! Sequential version
+#else 
 Module Mod_Fsklearn
 
   Use Mod_Fsklearn_Essential ! Necessary to use this module
@@ -151,7 +150,7 @@ Module Mod_Fsklearn
     ! define some procedures for the computational model
     Procedure :: Initialization => Example_Initialization
     Procedure :: Gen_Training   => Example_Generate_Training_Data
-    Procedure :: Prediction   => Example_Prediction
+    Procedure :: Prediction     => Example_Prediction
     Procedure :: Py_Training    => Example_Training
   End type Fsklearn_Example
 
@@ -171,7 +170,7 @@ Contains
 
     Call self%Common_Initialization ! Necessary
 
-    self%num_data_sets = 1000 ! assgin value to user defined variable
+    self%num_data_sets = 1000 ! assign a value to user defined variable
 
   End Subroutine Example_Initialization
 
@@ -179,12 +178,12 @@ Contains
   Subroutine Example_Generate_Training_Data(self, T_data)
 
     Implicit None
-    Class(Fsklearn_Example) :: self
-    Integer  :: num_total
+    Class(Fsklearn_Example)                                               :: self
+    Integer                                                               :: num_total
     Real(PS), Dimension(self%num_data_sets, self%n_inputs+self%n_outputs) :: T_data
-    Real(PS), Dimension(self%n_inputs) :: input
-    Real(PS), Dimension(self%n_outputs) :: output
-    Integer   :: i
+    Real(PS), Dimension(self%n_inputs)                                    :: input
+    Real(PS), Dimension(self%n_outputs)                                   :: output
+    Integer                                                               :: i
 
     num_total = self%n_inputs + self%n_outputs
 
@@ -192,8 +191,7 @@ Contains
       input = T_data(i, 1:self%n_inputs)
       output = T_data(i, self%n_inputs+1:self%n_outputs)
       ! Write line function is public in module mod_fsklearn_essential
-      ! Call with
-      !   Write_Line(file_number, input_vecrot, output_vector)
+      ! Call Write_Line(file_number, input_vecrot, output_vector)
       Call Write_Line(2000, input, self%n_outputs)
       Call Write_Line(3000, output, self%n_outputs)
     End Do
@@ -203,8 +201,8 @@ Contains
 
   Function Example_Prediction(self, input)
     Implicit None
-    Class(Fsklearn_Example) :: self
-    Real(PS), Dimension(self%n_inputs) :: input
+    Class(Fsklearn_Example)             :: self
+    Real(PS), Dimension(self%n_inputs)  :: input
     Real(PS), Dimension(self%n_outputs) :: Example_Prediction
 
     Example_Prediction = self%predict_one(input)
@@ -212,7 +210,7 @@ Contains
   End Function Example_Prediction
 
 
-  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓Call python to train↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+  !↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Call python to train ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
   !---------------------------------------------------------------
   ! If train_after_run is set as .True. in the .namelist file,
   ! run the python file after training.
@@ -221,14 +219,10 @@ Contains
     Implicit None
     Class(Fsklearn_Example) :: self
 
-
-    Call Execute_Command_Line('python '//Adjustl(Trim(self%coef_files_path)) &
-        //Adjustl(Trim(self%training_py)) )
+    Call Execute_Command_Line('python '//Adjustl(Trim(self%coef_files_path))//Adjustl(Trim(self%training_py)) )
 
   End Subroutine Example_Training
-  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑end training↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-
+  !↑↑↑↑↑↑↑↑↑↑↑↑↑↑ end training ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 End Module Mod_Fsklearn
 # endif
